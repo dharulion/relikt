@@ -1,0 +1,23 @@
+# Keep the top-level folders, and one folder per edition, tracked.
+# Everything inside an edition folder is ignored except its .gitkeep marker.
+
+/data/*
+!/data/.gitkeep
+!/data/*/
+/data/*/*
+!/data/*/.gitkeep
+
+/out/*
+!/out/.gitkeep
+!/out/*/
+/out/*/*
+!/out/*/.gitkeep
+
+/tmp/*
+!/tmp/.gitkeep
+!/tmp/*/
+/tmp/*/*
+!/tmp/*/.gitkeep
+
+# Python bytecode caches, at any level.
+__pycache__/
