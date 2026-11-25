@@ -1,74 +1,6 @@
-# Relikt - Recovering assets from legacy demoscene magazines.
+# Relikt - Recovering assets from legacy demoscene magazines
 
-English version available below: [English version](#english-version).
-
-Pamiętam te odległe, magiczne dni, kiedy drżącymi rękami otwierałem kopertę z listem i dyskietkami od przyjaciela, w strachu, czy stempel urzędu pocztowego nie uszkodził danych. Dwie, nawet trzy dyskietki z najnowszymi produkcjami, z kodem którego nie umialem zrozumiec. Szybki oddech, przegladnie zawartosci, demo, intra, grafiki, magi! Caly szary swiat Polski lat 90/2000 przestawal istniec, pelne zanurzenie w 256-kolorow, ucieczka, wolnosc. Tyle ciekawych wspomnien, nowych mozliwosci, otwarcie wyobrazni bez granic. Demoscena, swapping, friendship rulez! A gdyby tak miec mozliwosc powortu do tamtych lat? Nostalgia.
-
-Czy da sie dzisiaj uruchomic demo/intro/maga na standardowym komputerze? Tak, da sie, korzystajac z DosBox lub innych narzedzi. Czy jest to wygodne, czy bedzie Ci sie chcialo spedzic czas nad konfiguracja? Pewnie tak, byc moze, nie? Ciezko powiedziec. Od pewnego czasu myslalem o stworzeniu bazy/przegladarki tekstow ze starych magow polskiej demosceny. Niestety, przy braku umiejetnosci reverse engineeringu zadanie bylo prawdopodobnie niewykonalne w skonczonym czasie. Ale hej! Od czego mamy darmowe tokeny w AI? Przyznam, ze jestem zaskoczony (przerazony) z jaka latwoscia AI przeanalizowalo poszczegolne bloki pamieci i odtworzylo zasoby magazynu.
-
-Celem projektu jest extract articles from the binary files of old DOS-based demoscene magazines. W projekcie znajdziesz narzedzia - skrypty, mapping oraz podejscia do odtworzenia oryginalej zawartosci kilku najwazniejszych, polskich magazynow. Ze wzgledu na uszanowanie praw autorskich, nie beda publikowane tresci takie jak artykuly, muzyka czy grafika. W tym repozytorium znajduje sie tylko instrukcja, jak samodzielnie rozpakowac zasoby oraz ostatnia znana lokalizacja kazdego z wydan magazynow. Skrypty i analiza wykonana w calosci przez AI.
-
-Byc moze, w przyszlosci, na bazie narzedzi powstanie sensowna baza tekstów? Zobaczymy.
-
-## Struktura projektu:
-
-- `data/[nazwa-wydania]/plik.exe` - tutaj umiesc zrodlowy plik, np. `data/dragon5/DRAGON.EXE`
-- `tools/` - wspolne skrypty (magazines, eos_blocks, DIET); `tools/[nazwa-wydania]/` zawiera skrypty ekstrakcji przeznaczone tylko dla danego wydania, np. `tools/dragon5/extract.py`
-- `out/[nazwa-wydania]/` - tutaj beda znajdowac sie wszystkie odnalezione zasoby danego wydania
-- `examples/[nazwa-wydania]/` - lista artykulow, lista grafik oraz lista muzyki bez wlasciwych utworow (pamietaj - prawa autorskie). Lista zawartosci pomoze sprawdzic, czy twoje uruchomienie odtworzenia zadzialalo poprawnie
-- `tmp/[nazwa-wydania]/` - folder tymczasowy potrzebny w trakcie odczytu/przetwarzania danego wydania
-- `README.MD` - ten dokument
-
-## Jak uruchomic projekt:
-
-1. Pobierz DRAGON5.exe ze znanej lokalizacji
-2. Umiesci plik `DRAGON.EXE` w folderze `data/dragon5/`
-3. Uruchom: `python relikt.py -e dragon5 full`
-4. Wyniki znajdziesz w `out/dragon5/`; status sprawdzisz poleceniem `python relikt.py -e dragon5 status`
-5. Nowe wydanie dodaj przez utworzenie folderu `data/[nazwa-wydania]/` oraz skryptow `tools/[nazwa-wydania]/extract.py` i opcjonalnie `tools/[nazwa-wydania]/extract_media.py`; `relikt.py` sam wybiera wlasciwe skrypty na podstawie wydania
-6. `python relikt.py list` pokazuje wszystkie wykryte wydania, a `python relikt.py --all full` przetwarza je jednoczesnie
-
-Wymagania: Python 3.10+ (tylko biblioteka standardowa). DOSBox-X, REA i Rizin sa opcjonalne i potrzebne tylko do recznej analizy, nie do uruchomienia ekstraktorow.
-
-Testy: `python -m unittest discover -s tests`.
-
-## Lokalizacja oryginalnych wydan:
-
-1. Dragon wydanie 5 09/1999
-   - <https://demozoo.org/productions/175995/>
-   - <https://www.pouet.net/prod.php?which=52970>
-   - <https://files.scene.org/view/mags/dragon/dragon5.zip>
-
-## Biblioteki opensource wykorzystane w projekcie:
-
-### Skrypty projektu:
-
-- `relikt.py` - glowny CLI/orchestrator; wybiera wydanie i decyduje, ktore skrypty ekstrakcji uruchomic
-- `tools/magazines.py` - rejestr wydan oraz sciezki `data/<wydanie>`, `out/<wydanie>`, `tmp/<wydanie>`
-- `tools/eos_blocks.py` - skaner i dekoder blokow DIET/EOS
-- `tools/diet_unpack.py` i `tools/diet_rebuild.py` - rozpakowanie warstwy DIET v1.45f i odtworzenie pliku EXE; schemat formatu oparty na dokumentacji deark
-- `tools/dragon5/extract.py` i `tools/dragon5/extract_media.py` - ekstraktory artykulow, muzyki i grafik dla Dragon #5 (dekodowanie CP852, 8-bitowe PNG, moduly XM)
-
-### Zewnetrzne narzedzia opensource uzyte podczas analizy projektu:
-
-- [DOSBox-X (GPL-2.0)](https://github.com/joncampbell123/dosbox-x) - emulacja DOS, debugger i zrzuty pamieci
-- [REA (MIT)](https://github.com/morluto/rea/) - narzedzie/MCP do reverse engineeringu wspierajace agenta AI
-- [Rizin (LGPL-3.0)](https://github.com/rizinorg/rizin) - framework do analizy binariow, disassemblera i debugowania
-- [deark (MIT-style)](https://github.com/jsummers/deark) - zrodlo dokumentacji formatu DIET i innych DOS-owych packerow; uzywany jako odniesienie, nie jest wywolywany w trakcie ekstrakcji
-
-## Wez udzial w projekcie:
-
-1. Wykonaj fork repozytorium.
-2. Utworz branch z opisowa nazwa, np. `git checkout -b dragon6-extract`.
-3. Dodaj zmiany (np. skrypty dla nowego wydania w `tools/[nazwa-wydania]/`) i dodaj je poleceniami `git add <pliki>` oraz `git commit -m "Opis zmiany"`.
-4. Wypchnij branch na swoj fork: `git push origin <nazwa-brancha>`.
-5. Otworz Pull Request i krotko opisz, co sie zmienilo oraz jak to sprawdzic, np. `python relikt.py -e <wydanie> status`.
-
-Do PR nie dodawaj zawartosci folderow `data/`, `out/` i `tmp/` - to materialy zrodlowe i wyniki ekstrakcji, nie kod projektu.
-
-Uwaga: skrypty w `tools/[nazwa-wydania]/` sa importowane i wykonywane rowniez przez `relikt.py verify`. Uruchamiaj tylko kod, ktoremu ufasz; nowe wydania traktuj jak kod wykonywalny i sprawdzaj je przed puszczeniem.
-
-## English version
+Polish version available below: [Polish version](#polish-version)
 
 I remember those distant, magical days when I opened an envelope with a letter and floppy disks from a friend with trembling hands, afraid that the post office stamp had damaged the data. Two, even three diskettes with the latest productions, with code I couldn't understand. A quick breath, a glance through the contents, demos, intros, graphics, mags! The whole grey world of Poland in the 90s/2000s ceased to exist, full immersion in 256 colours, escape, freedom. So many interesting memories, new possibilities, imagination without limits. Demoscene, swapping, friendship rulez! And what if I could go back to those years? Nostalgia.
 
@@ -98,7 +30,7 @@ Maybe in the future a useful text database will grow out of these tools? We'll s
 
 Requirements: Python 3.10+ (standard library only). DOSBox-X, REA and Rizin are optional and only needed for manual analysis, not for running the extractors.
 
-Tests: `python -m unittest discover -s tests`.
+Tests: `python -m unittest discover -s tests`
 
 ### Locations of original issues:
 
@@ -124,14 +56,58 @@ Tests: `python -m unittest discover -s tests`.
 - [Rizin (LGPL-3.0)](https://github.com/rizinorg/rizin) - framework for binary analysis, disassembly and debugging
 - [deark (MIT-style)](https://github.com/jsummers/deark) - source of documentation for the DIET format and other DOS packers; used as a reference, not called during extraction
 
-### Contributing:
+## Polish version
 
-1. Fork the repository.
-2. Create a branch with a descriptive name, e.g. `git checkout -b dragon6-extract`.
-3. Add your changes (e.g. scripts for a new issue in `tools/[issue-name]/`) and stage/commit them with `git add <files>` and `git commit -m "Description of change"`.
-4. Push the branch to your fork: `git push origin <branch-name>`.
-5. Open a Pull Request and briefly describe what changed and how to verify it, e.g. `python relikt.py -e <issue> status`.
+Pamiętam te odległe, magiczne dni, kiedy drżącymi rękami otwierałem kopertę z listem i dyskietkami od przyjaciela, w strachu, czy stempel urzędu pocztowego nie uszkodził danych. Dwie, nawet trzy dyskietki z najnowszymi produkcjami, z kodem którego nie umialem zrozumiec. Szybki oddech, przegladnie zawartosci, demo, intra, grafiki, magi! Caly szary swiat Polski lat 90/2000 przestawal istniec, pelne zanurzenie w 256-kolorow, ucieczka, wolnosc. Tyle ciekawych wspomnien, nowych mozliwosci, otwarcie wyobrazni bez granic. Demoscena, swapping, friendship rulez! A gdyby tak miec mozliwosc powortu do tamtych lat? Nostalgia.
 
-Do not add content from `data/`, `out/` and `tmp/` to your PR - these are source materials and extraction results, not project code.
+Czy da sie dzisiaj uruchomic demo/intro/maga na standardowym komputerze? Tak, da sie, korzystajac z DosBox lub innych narzedzi. Czy jest to wygodne, czy bedzie Ci sie chcialo spedzic czas nad konfiguracja? Pewnie tak, byc moze, nie? Ciezko powiedziec. Od pewnego czasu myslalem o stworzeniu bazy/przegladarki tekstow ze starych magow polskiej demosceny. Niestety, przy braku umiejetnosci reverse engineeringu zadanie bylo prawdopodobnie niewykonalne w skonczonym czasie. Ale hej! Od czego mamy darmowe tokeny w AI? Przyznam, ze jestem zaskoczony (przerazony) z jaka latwoscia AI przeanalizowalo poszczegolne bloki pamieci i odtworzylo zasoby magazynu.
 
-Note: scripts in `tools/<edition>/` are imported and executed even by `relikt.py verify`. Only run code you trust and review new editions before using them.
+Celem projektu jest extract articles from the binary files of old DOS-based demoscene magazines. W projekcie znajdziesz narzedzia - skrypty, mapping oraz podejscia do odtworzenia oryginalej zawartosci kilku najwazniejszych, polskich magazynow. Ze wzgledu na uszanowanie praw autorskich, nie beda publikowane tresci takie jak artykuly, muzyka czy grafika. W tym repozytorium znajduje sie tylko instrukcja, jak samodzielnie rozpakowac zasoby oraz ostatnia znana lokalizacja kazdego z wydan magazynow. Skrypty i analiza wykonana w calosci przez AI.
+
+Byc moze, w przyszlosci, na bazie narzedzi powstanie sensowna baza tekstów? Zobaczymy.
+
+## Struktura projektu:
+
+- `data/[nazwa-wydania]/plik.exe` - tutaj umiesc zrodlowy plik, np. `data/dragon5/DRAGON.EXE`
+- `tools/` - wspolne skrypty (magazines, eos_blocks, DIET); `tools/[nazwa-wydania]/` zawiera skrypty ekstrakcji przeznaczone tylko dla danego wydania, np. `tools/dragon5/extract.py`
+- `out/[nazwa-wydania]/` - tutaj beda znajdowac sie wszystkie odnalezione zasoby danego wydania
+- `examples/[nazwa-wydania]/` - lista artykulow, lista grafik oraz lista muzyki bez wlasciwych utworow (pamietaj - prawa autorskie). Lista zawartosci pomoze sprawdzic, czy twoje uruchomienie odtworzenia zadzialalo poprawnie
+- `tmp/[nazwa-wydania]/` - folder tymczasowy potrzebny w trakcie odczytu/przetwarzania danego wydania
+- `README.MD` - ten dokument
+
+## Jak uruchomic projekt:
+
+1. Pobierz DRAGON5.exe ze znanej lokalizacji
+2. Umiesci plik `DRAGON.EXE` w folderze `data/dragon5/`
+3. Uruchom: `python relikt.py -e dragon5 full`
+4. Wyniki znajdziesz w `out/dragon5/`; status sprawdzisz poleceniem `python relikt.py -e dragon5 status`
+5. Nowe wydanie dodaj przez utworzenie folderu `data/[nazwa-wydania]/` oraz skryptow `tools/[nazwa-wydania]/extract.py` i opcjonalnie `tools/[nazwa-wydania]/extract_media.py`; `relikt.py` sam wybiera wlasciwe skrypty na podstawie wydania
+6. `python relikt.py list` pokazuje wszystkie wykryte wydania, a `python relikt.py --all full` przetwarza je jednoczesnie
+
+Wymagania: Python 3.10+ (tylko biblioteka standardowa). DOSBox-X, REA i Rizin sa opcjonalne i potrzebne tylko do recznej analizy, nie do uruchomienia ekstraktorow.
+
+Testy: `python -m unittest discover -s tests`
+
+## Lokalizacja oryginalnych wydan:
+
+1. Dragon wydanie 5 09/1999
+   - <https://demozoo.org/productions/175995/>
+   - <https://www.pouet.net/prod.php?which=52970>
+   - <https://files.scene.org/view/mags/dragon/dragon5.zip>
+
+## Biblioteki opensource wykorzystane w projekcie:
+
+### Skrypty projektu:
+
+- `relikt.py` - glowny CLI/orchestrator; wybiera wydanie i decyduje, ktore skrypty ekstrakcji uruchomic
+- `tools/magazines.py` - rejestr wydan oraz sciezki `data/<wydanie>`, `out/<wydanie>`, `tmp/<wydanie>`
+- `tools/eos_blocks.py` - skaner i dekoder blokow DIET/EOS
+- `tools/diet_unpack.py` i `tools/diet_rebuild.py` - rozpakowanie warstwy DIET v1.45f i odtworzenie pliku EXE; schemat formatu oparty na dokumentacji deark
+- `tools/dragon5/extract.py` i `tools/dragon5/extract_media.py` - ekstraktory artykulow, muzyki i grafik dla Dragon #5 (dekodowanie CP852, 8-bitowe PNG, moduly XM)
+
+### Zewnetrzne narzedzia opensource uzyte podczas analizy projektu:
+
+- [DOSBox-X (GPL-2.0)](https://github.com/joncampbell123/dosbox-x) - emulacja DOS, debugger i zrzuty pamieci
+- [REA (MIT)](https://github.com/morluto/rea/) - narzedzie/MCP do reverse engineeringu wspierajace agenta AI
+- [Rizin (LGPL-3.0)](https://github.com/rizinorg/rizin) - framework do analizy binariow, disassemblera i debugowania
+- [deark (MIT-style)](https://github.com/jsummers/deark) - zrodlo dokumentacji formatu DIET i innych DOS-owych packerow; uzywany jako odniesienie, nie jest wywolywany w trakcie ekstrakcji

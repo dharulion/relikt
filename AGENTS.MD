@@ -27,4 +27,6 @@ Python 3.10+ (standard library only). External DOS/emulation tools are optional 
 - Do not commit generated content from `out/` or `tmp/`.
 - Write all extracted text as UTF-8 so Polish characters are preserved.
 - Extractor modules under `tools/<edition>/` are imported and executed by `relikt.py` (including during `verify`); treat them as code and review untrusted additions before running them.
+- Do not commit and/or push to the main/master repo. This step will be done manually
+- This is a public code, make sure it is secure, efficient, does not contains any passwords, keys and other sensitive data
 - Run the smoke tests with `python -m unittest discover -s tests`.
