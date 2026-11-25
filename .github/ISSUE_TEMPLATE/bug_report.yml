@@ -1,0 +1,73 @@
+name: Bug report
+description: Report a problem with extraction, tooling, or documentation
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting an issue. Please do not include copyrighted extracted magazine content, secrets, or files from `data/`, `out/`, or `tmp/`.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What happened, and what impact does it have?
+    validations:
+      required: true
+
+  - type: input
+    id: edition
+    attributes:
+      label: Edition
+      description: Which edition is affected, if any?
+      placeholder: dragon5
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: Include exact commands and relevant inputs.
+      placeholder: |
+        1. Place `DRAGON.EXE` in `data/dragon5/`
+        2. Run `python relikt.py -e dragon5 full`
+        3. Observe ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior / logs
+      description: Include error output or logs. Redact any sensitive data.
+      render: text
+    validations:
+      required: true
+
+  - type: input
+    id: python
+    attributes:
+      label: Python version
+      placeholder: Python 3.12.x
+
+  - type: input
+    id: os
+    attributes:
+      label: Operating system
+      placeholder: Windows 11 / macOS / Linux
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: I did not include secrets, passwords, keys, or sensitive data.
+          required: true
+        - label: I did not attach copyrighted extracted content or files from `data/`, `out/`, or `tmp/`.
+          required: true

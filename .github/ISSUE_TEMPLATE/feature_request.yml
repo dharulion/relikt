@@ -1,0 +1,58 @@
+name: Feature request / edition support
+description: Suggest an improvement or support for a new magazine edition
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please do not include copyrighted magazine binaries or extracted content. Public source links are helpful.
+
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Request type
+      options:
+        - New edition support
+        - Extraction improvement
+        - Documentation / tooling
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or goal
+      description: What do you want to improve or support?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed approach
+      description: Describe the suggested change, extractor approach, or workflow.
+
+  - type: textarea
+    id: sources
+    attributes:
+      label: Public sources / references
+      description: Links to public issue pages, checksums, format notes, or known locations. Do not upload copyrighted binaries.
+      render: text
+
+  - type: textarea
+    id: verification
+    attributes:
+      label: Verification ideas
+      description: How can maintainers verify the change?
+      placeholder: python relikt.py -e <edition> verify && python relikt.py -e <edition> status
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: I did not include secrets or sensitive data.
+          required: true
+        - label: I did not attach copyrighted magazine binaries or extracted content.
+          required: true
